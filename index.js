@@ -1,38 +1,37 @@
-const fs = require('fs');
-const dug = require('dug')
+// ECT based diet plugin for rendering Dynamic HTML files
 
-/*
- * Usage:
- * var dug = require('diet-dug')({ path: app.path+'/static/dug' })
- * var jade = require('diet-dug')({ path: app.path+'/static/jade' })
- * app.header(dug)
- *
- * $.render('index') => $.render('index.jade')
- *
- */
+// Dependencies
+var fs = require('fs')
+var dug = require('dug')
+var merge = require('merge')
+var clone = require('clone')
 
-module.exports = function(options) {
-  var options = options || {}
-
-  return function($) {
-    $.render = function(filename) {
-      $.header('Content-Type', 'text/html; charset=UTF-8')
-      console.log(filename);
-      // give depricated warning if .jade is used
-      
-      // filename var is set and yeld WARNING if it is set to .jade
-      filename ? (filename.indexOf('.jade')>-1 ? (console.log('WARNING: Will try to render .dug file NOT .jade IT is DEPRICATED!')) : ($.error('No .dug file specified'))
-      // check if filename is dug or jade if not append dug
-      filename.indexOf('.dug')>-1 ? (options.file = filename) : (filename.indexOf('.jade')>-1 ? (options.file = filename) : (options.file = filename. + '.dug'))
-      
-      var path = (options.path.slice(-1) === '/') ? options.path : options.path + '/'
-      var fn = jade.compileFile(path + options.file, {
-        pretty: true,
-      })
-      var html = fn($.data)
-      // console.log(html);
-      $.end(html)
-    }
-    $.return()
-  }
+module.exports = function(options){
+	
+	var options = options || {}
+	var renderer = ect(merge({ 
+		root : options.path, 
+		ext: '.html', 
+		open: '{{', close: '}}',
+		cache: true,
+		watch: true,
+		gzip: true,
+	}, options))
+	
+	return function($){
+		$.htmlModule = function(pathname){
+		    if(!pathname || (pathname && pathname.indexOf(/\n|\r/) != -1)){
+    			pathname ? ( pathname.indexOf('.dug')>-1 ? ( var path = pathname ) : ( var path = pathname + '.dug' ) ) : var path = 'index.dug'
+    			// var path = pathname ? pathname : 'index.dug' 
+    			var context = merge(clone($, false, 1), $.data)
+    			var html = renderer.render(path, context)
+    			$.response.end(html)
+			} else if (pathname) {
+			    $.response.end(pathname)
+			}
+			
+			$.nextRoute() // call next route
+		}
+		$.return()
+	}
 }

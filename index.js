@@ -22,20 +22,34 @@ module.exports = function(options){
 	
 	return function($){
 		$.htmlModule = function(pathname){
-		    //check if file exist in r
-		    var context = merge(clone($, false, 1), $.data)
-		    // if has new line or start with < 
-		    // will fail if your filename has < in it (need other way to check if it is a html string)
-		    if(!pathname || (pathname && pathname.indexOf(/\n|\r|</) != -1)){
+		   /*
+		   	CHECK root set if yes :
+		   	CHECK if has .pug if yes
+		   	CHECK file exists with pathname
+		   	? CHECK file exists with pathname +  root
+		   	case no
+		   	CHECK file exists with pathname + pug
+		   	? CHECK file exists with pathname +  root + pug
+		   	CHECK if it renders as string
+		   	
+		   	CHECK root set if no :
+		   	CHECK file exists no try render string
+		   */
+		   var context = merge(clone($, false, 1), $.data)
+		    
+		   if(!pathname || (pathname && pathname.indexOf(/\n|\r/) != -1)){
+    			// if has option path hornor it to all calls init new instance without for other 
+		    	if (!options.path === null) pathname = options.path + '/' + pathname
     			pathname ? ( pathname.indexOf('.pug')>-1 ? ( var path = pathname ) : ( var path = pathname + '.pug' ) ) : var path = 'index.pug'
     			// var path = pathname ? pathname : 'index.pug'
+    		
     			var html = renderer.renderFile(path, context)
     			$.response.end(html)
 			} else if (pathname) {
 			    renderer.render(pathname, context)
 			}
 			
-			$.nextRoute() // call next route
+		$.nextRoute() // call next route
 		}
 		$.return()
 	}

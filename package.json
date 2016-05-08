@@ -1,10 +1,11 @@
 {
-  "name": "diet-jade",
-  "version": "1.0.0",
-  "description": "Jade based diet plugin for rendering Jade HTML files",
-  "homepage": "http://github.com/mnzt/diet-jade/",
+  "name": "diet-pug",
+  "version": "1.0.1",
+  "description": "Pug/Jade based diet plugin for rendering PUG files",
+  "homepage": "http://github.com/DIREKTSPEED-LTD/diet-pug/",
   "keywords": [
     "jade",
+    "pug"
     "html",
     "parse",
     "render",
@@ -15,21 +16,21 @@
     "diet.js"
   ],
   "bugs": {
-    "url": "http://github.com/mnzt/diet-jade/issues",
-    "email": "toby@nerdping.com"
+    "url": "http://github.com/DIREKTSPEED-LTD/diet-pug/issues",
+    "email": "frank@dspeed.eu"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mnzt/diet-jade.git"
+    "url": "https://github.com/DIREKTSPEED-LTD/diet-pug.git"
   },
   "license": "MIT",
   "author": {
-    "name": "MNZT",
-    "email": "toby@nerdping.com",
-    "url": "http://github.com/mnzt"
+    "name": "Frank Lemanschik",
+    "email": "frank@dspeed.eu",
+    "url": "http://github.com/frank-dspeed"
   },
   "dependencies": {
-    "jade": "^1.11.0"
+    "pug": "^2.0.0"
   },
   "main": "index.js",
   "engines": {
